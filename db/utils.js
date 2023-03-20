@@ -9,4 +9,3 @@ class NoteObj {
   }
   
 }
-// connect the functionaltiy to the front end

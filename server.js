@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const notes = require("./db/db.json");
-const { response } = require("express");
+const { response, json } = require("express");
 const app = express();
 const db = (file) =>
   fs.readFile(`${process.cwd()}/db/${file}`, { encoding: "utf-8" });
@@ -12,25 +12,30 @@ const { isUtf8 } = require("buffer");
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
-console.log(notes);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//   console.log(req, res);
 app.use(express.static("public"));
 
 app.get("/api/notes", (req, res) => {
-  console.log("getting all notes");
-  res.json(notes);
+  return readFileAsync("./db/db.json", "utf8").then((notes) => {
+    let notesArray;
+  
+    try {
+     notesArray = [].concat(JSON.parse(notes));
+     console.log(notesArray) 
+    } catch (error) {
+      notesArray = []
+    }
+    return res.json(notesArray)
+  })
+ 
 });
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "./public/index.html"))
 );
 
-app.get("/notes", (req, res) =>
-  res.sendFile(path.join(__dirname, "./public/notes.html"))
-);
 
 app.get("./db/utils.js", (req, res) =>
   res.sendFile(path.join(__dirname, "/db/utils.js"))
@@ -75,8 +80,8 @@ app.delete("/api/notes/:id", function (req, res) {
     });
 });
 
-app.get("notes", function (req, res) {
-  res.sendFile(path.join(__dirname, "./"));
+app.get("/notes", function (req, res) {
+  res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
 app.get("/", function (req, res) {
