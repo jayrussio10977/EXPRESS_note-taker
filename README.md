@@ -11,6 +11,8 @@ The database files have been sucessfully linked, initializing  both the front an
 -When users need to delete stored notes
 -Then they may remove them with the "trash tab" 
 
-*** The delete and storage functionalities do work, however you may have to restart the server and refresh the browser***
+
 
 https://jayrussio10977.github.io/EXPRESS_note-taker/
+
+https://glacial-tundra-89224.herokuapp.com/
